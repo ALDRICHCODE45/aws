@@ -21,6 +21,7 @@ Avanzar rápido, pero con fundamentos fuertes:
   - IAM security tools (`04-iam-security-tools.md`): Credential Report vs Access Advisor.
   - EC2 basics, Security Groups, Purchasing Options (`05`, `06`, `07`).
   - VPC Networking — IGW + NACL + flujo de tráfico (`08-vpc-networking-igw-nacl.md`).
+  - EC2 Storage Deep Dive (`09-ec2-storage-deep-dive.md`): EBS/AMI/Instance Store/EFS, Multi-Attach y trampas de examen.
 - `02-labs/`
   - Ejercicios prácticos y mini-proyectos con AWS CLI/IaC/código.
 - `03-exam/`
