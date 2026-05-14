@@ -134,6 +134,29 @@ Cliente → POST /auth/login
         → Devuelve sub + email
 ```
 
+### Cognito NO valida cada request — distinción clave
+
+Hay una sutileza importante que el examen puede usar para confundirte:
+
+```
+❌ Mal entendido:  Request → tu app → llama a Cognito → Cognito valida → respuesta
+✅ Correcto:       Request → tu app → valida firma JWT localmente → respuesta
+```
+
+**Lo que hace tu backend en cada request:**
+1. Descarga el JWKS de Cognito **una sola vez** (lo cachea en memoria).
+2. Usa la **clave pública** del JWKS para verificar la firma del JWT localmente.
+3. Si la firma es válida → confía en los claims (`sub`, `email`, `exp`, etc.).
+4. Cognito **no recibe ninguna llamada** en ese proceso.
+
+Cognito solo participa **al momento del login** (emite y firma el token).
+Después, cada servidor valida la firma por su cuenta usando criptografía asimétrica (RS256).
+
+**Por qué esto escala:**
+- Validar una firma JWT es una operación matemática local → microsegundos, sin red, sin base de datos.
+- Cualquier instancia puede validar cualquier token sin coordinarse con ninguna otra.
+- El estado vive en el token, no en el servidor → diseño stateless puro.
+
 **Mapeo a DynamoDB**:
 - `sub` del token = `userId` (partition key en tabla `users`)
 - Atributos adicionales: `email`, `name`, `createdAt`, etc.
