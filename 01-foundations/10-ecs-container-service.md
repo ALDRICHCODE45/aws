@@ -73,6 +73,35 @@ Así solo el ALB puede hablar con las tasks → las tasks nunca quedan expuestas
 - **host**: usa la red de la EC2 directamente (raro).
 - **none**: sin red (solo para tareas batch sin red).
 
+### Trampa clásica: puerto host fijo en EC2 launch type (bridge)
+
+En EC2 launch type con network mode `bridge`, cada contenedor necesita mapear su puerto interno al puerto del host EC2:
+
+```
+Contenedor 1: host:8080 → contenedor:80  ✅
+Contenedor 2: host:8080 → contenedor:80  💥 CONFLICTO — puerto ya ocupado
+```
+
+Si intentás correr **dos copias del mismo contenedor en la misma EC2** con un puerto host fijo, el segundo falla — aunque sobre CPU y RAM.
+
+**Solución: puerto host = 0 (o vacío) en la Task Definition**
+
+AWS asigna un puerto aleatorio disponible (ephemeral port) a cada contenedor:
+```
+Contenedor 1: host:32771 → contenedor:80  ✅
+Contenedor 2: host:32772 → contenedor:80  ✅
+```
+El ALB descubre esos puertos dinámicos automáticamente → **Dynamic Port Mapping**.
+
+**Por qué Fargate no tiene este problema:**
+En Fargate (`awsvpc`) cada task tiene su **propia IP privada** — no hay host compartido, no existe el concepto de puerto host. Por eso solo definís el puerto del contenedor y listo.
+
+| | **EC2 + bridge** | **Fargate + awsvpc** |
+|---|---|---|
+| Puerto host | Necesario (puede colisionar) | No existe |
+| Múltiples tasks en mismo host | Requiere puerto host = 0 | Sin problema (IPs separadas) |
+| Solución conflicto | Dynamic Port Mapping | N/A |
+
 ---
 
 ## 4) Security Groups (refresco)
