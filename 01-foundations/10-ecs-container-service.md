@@ -48,6 +48,26 @@ Cluster
 - Se puede asociar un **Security Group** específico a cada task.
 - **Requerido para ALB/NLB** (el modo bridge no funciona bien con load balancers).
 
+### Fargate + awsvpc: el detalle clave (Load Balancing)
+En Fargate **no existe el concepto de "puerto del host"** porque no hay host que vos gestionés.
+En Docker clásico hacés `-p 8080:80` (host:contenedor). En Fargate eso no aplica:
+
+```
+Docker clásico:  host:8080 → contenedor:80   (mapeo necesario)
+Fargate awsvpc:  task-ip:80 → contenedor:80  (directo, sin mapeo)
+```
+
+- El ALB habla directo con la IP privada de cada task en el puerto del contenedor.
+- Por eso en la Task Definition **solo definís el puerto del contenedor**, no el del host.
+- Cada task tiene su propia IP → el ALB puede enrutar a cada una de forma independiente.
+
+**Patrón de Security Groups en Load Balancing Fargate:**
+```
+SG-ALB   → inbound 80/443 desde 0.0.0.0/0 (internet)
+SG-Tasks → inbound 80 solo desde SG-ALB (no desde internet directamente)
+```
+Así solo el ALB puede hablar con las tasks → las tasks nunca quedan expuestas directamente.
+
 ### Otros modos (menos relevantes para examen)
 - **bridge**: el default legacy, comparte la ENI del host.
 - **host**: usa la red de la EC2 directamente (raro).
