@@ -176,7 +176,35 @@ SG-Tasks     → inbound [puerto-app] solo desde SG-ALB
 
 ---
 
-## 11) Tips finales
+## 11) AWS Copilot — CLI para ECS sin dolor
+
+**Qué es**: herramienta CLI oficial de AWS para crear, publicar y operar aplicaciones en contenedores listas para producción, sin tener que configurar toda la infra a mano.
+
+**Qué hace por vos**:
+- Provisiona toda la infra necesaria automáticamente: ECS, VPC, ALB/ELB, ECR, IAM roles...
+- Arma un **pipeline de despliegue** con CodePipeline integrado.
+- Permite desplegar en **múltiples entornos** (dev, staging, prod) con un solo comando.
+- Incluye herramientas de observabilidad: logs, estado de salud, troubleshooting.
+
+**Dónde puede correr tus apps**:
+- Amazon ECS
+- AWS Fargate
+- AWS App Runner
+
+**Flujo de trabajo**:
+```
+Arquitectura (CLI/YAML)  →  AWS Copilot  →  infra bien diseñada
+                                          →  pipeline de despliegue
+                                          →  operaciones y troubleshooting
+                                                    ↓
+                                          ECS / Fargate / App Runner
+```
+
+**Truco examen**: Si la pregunta dice "desplegar contenedores sin configurar infraestructura manualmente" o "automatizar pipeline de ECS con un solo comando" → **AWS Copilot**.
+
+---
+
+## 12) Tips finales
 
 - **Task Definition es inmutable**: no se edita, se crea una nueva revisión.
 - **Service usa una revisión específica** de la Task Definition.
