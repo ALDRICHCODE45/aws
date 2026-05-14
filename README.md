@@ -26,6 +26,9 @@ Avanzar rápido, pero con fundamentos fuertes:
    - Cognito — Identity & Authentication (`11-cognito-identity.md`): User Pools, Identity Pools, tokens, triggers, integración con DynamoDB.
 - `02-labs/`
   - Ejercicios prácticos y mini-proyectos con AWS CLI/IaC/código.
+- `04-architectures/`
+  - Patrones de arquitectura típicos de AWS con foco en examen. Cada arquitectura en su propio archivo.
+  - Web App 3 niveles (`01-3-tier-web-app.md`): ELB + EC2 + ElastiCache + RDS, Multi-AZ, Auto Scaling.
 - `03-exam/`
   - Resúmenes de alto impacto, preguntas tipo examen y errores frecuentes.
   - Incluye: `regions-az-edge-repaso-practico.md` para repaso rápido del bloque 1.
