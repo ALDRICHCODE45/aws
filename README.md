@@ -22,6 +22,8 @@ Avanzar rápido, pero con fundamentos fuertes:
   - EC2 basics, Security Groups, Purchasing Options (`05`, `06`, `07`).
   - VPC Networking — IGW + NACL + flujo de tráfico (`08-vpc-networking-igw-nacl.md`).
   - EC2 Storage Deep Dive (`09-ec2-storage-deep-dive.md`): EBS/AMI/Instance Store/EFS, Multi-Attach y trampas de examen.
+   - ECS — Elastic Container Service (`10-ecs-container-service.md`): Clusters, Services, Task Definitions, Fargate vs EC2, despliegues, ECR.
+   - Cognito — Identity & Authentication (`11-cognito-identity.md`): User Pools, Identity Pools, tokens, triggers, integración con DynamoDB.
 - `02-labs/`
   - Ejercicios prácticos y mini-proyectos con AWS CLI/IaC/código.
 - `03-exam/`
