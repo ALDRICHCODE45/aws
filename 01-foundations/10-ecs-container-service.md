@@ -204,7 +204,35 @@ Arquitectura (CLI/YAML)  →  AWS Copilot  →  infra bien diseñada
 
 ---
 
-## 12) Tips finales
+## 12) Amazon EKS — Elastic Kubernetes Service
+
+**Qué es**: servicio administrado de AWS para correr clústeres **Kubernetes** en la nube.
+
+- Kubernetes = sistema open source para despliegue, escalado y gestión de contenedores (generalmente Docker).
+- EKS es la **alternativa a ECS** con objetivo similar pero API y modelo diferente.
+- **Kubernetes es agnóstico a la nube** → corre en AWS, Azure, GCP, on-premises. Por eso es la opción cuando ya tenés Kubernetes en otro lado y querés migrar a AWS sin reescribir nada.
+
+### Launch types (igual que ECS)
+- **EC2**: vos provisionás los nodos trabajadores (worker nodes).
+- **Fargate**: contenedores sin servidor, AWS maneja la infra.
+
+### ECS vs EKS — cuándo usar cada uno
+
+| | **ECS** | **EKS** |
+|---|---|---|
+| Orquestador | Propio de AWS | Kubernetes (open source) |
+| Curva de aprendizaje | Menor | Mayor |
+| Portabilidad | Solo AWS | Multi-cloud / on-premises |
+| Caso típico | Apps nuevas en AWS | Migración desde Kubernetes existente |
+
+**Truco examen**:
+- "Ya usamos Kubernetes on-premises y queremos migrar a AWS" → **EKS**
+- "Queremos contenedores administrados en AWS sin experiencia previa en K8s" → **ECS/Fargate**
+- "Necesitamos portabilidad entre nubes" → **EKS** (Kubernetes es agnóstico)
+
+---
+
+## 13) Tips finales
 
 - **Task Definition es inmutable**: no se edita, se crea una nueva revisión.
 - **Service usa una revisión específica** de la Task Definition.
