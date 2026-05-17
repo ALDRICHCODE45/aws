@@ -10,6 +10,7 @@ Ver carpeta [`05-lambda/`](../05-lambda/).
 | [`02-sync-alb.md`](../05-lambda/02-sync-alb.md) | Invocación síncrona vía ALB |
 | [`03-async-invocation.md`](../05-lambda/03-async-invocation.md) | Invocación asíncrona + idempotencia |
 | [`04-eventbridge.md`](../05-lambda/04-eventbridge.md) | Cron jobs y reacción a eventos |
+| [`05-s3-events.md`](../05-lambda/05-s3-events.md) | S3 Event Notifications → Lambda |
 
 Próximos (pendientes):
 - Event Source Mapping (SQS, Kinesis, DynamoDB Streams)
