@@ -233,3 +233,133 @@ Si una pregunta menciona "load balancer + Lambda" → la respuesta correcta SIEM
 - [ ] **No WebSockets** con ALB → usar API Gateway WebSocket
 - [ ] Request/Response máx **1 MB** cada uno
 - [ ] ALB inyecta headers `X-Forwarded-*` y `X-Amzn-Trace-Id`
+
+---
+
+## 7) Invocación asíncrona
+
+Servicios como **S3, SNS, EventBridge (CloudWatch Events)** invocan Lambda de forma asíncrona: empujan un evento y NO esperan respuesta.
+
+### 7.1) Flujo
+
+```
+S3 / SNS / EventBridge
+       ↓ (push, InvocationType=Event)
+Cola interna de Lambda (gestionada por AWS, invisible para vos)
+       ↓
+   Lambda Function
+       ↓ (si falla)
+   Reintentos automáticos
+       ↓ (si sigue fallando)
+   DLQ o Destinations
+```
+
+> ⚠️ La "cola de eventos" del diagrama es **interna de Lambda**. Vos NO la creás ni la ves. Es distinta de una SQS propia (eso es Event Source Mapping → otra cosa).
+
+---
+
+### 7.2) Asíncrono vs Event Source Mapping (CRÍTICO para examen)
+
+| Aspecto | Invocación asíncrona | Event Source Mapping |
+|---|---|---|
+| **Servicios típicos** | S3, SNS, EventBridge | SQS, Kinesis, DynamoDB Streams, MSK |
+| **Quién empuja** | El servicio **push** a Lambda | Lambda **pollea** activamente la fuente |
+| **Cola** | Interna de Lambda (invisible) | Vos la creás / ya existe |
+| **Reintentos** | 2 (3 intentos totales) por Lambda | Depende del servicio fuente |
+| **InvocationType** | `Event` | (no aplica, es polling) |
+| **Respuesta al caller** | 202 Accepted inmediato | (no aplica) |
+
+**Regla mnemotécnica**: si el servicio **PUSHEA** → asíncrono. Si Lambda **LEE** una cola → event source mapping.
+
+---
+
+### 7.3) Reintentos y errores
+
+| Setting | Default | Rango |
+|---|---|---|
+| `MaximumRetryAttempts` | 2 reintentos (3 intentos totales) | 0 - 2 |
+| `MaximumEventAgeInSeconds` | 6 horas | 60 s - 6 h |
+| Backoff entre reintentos | ~1 min, ~2 min | No configurable |
+
+⚠️ Cada reintento produce **logs duplicados en CloudWatch** → no asumas que un log duplicado es un bug.
+
+Cuando se agotan los reintentos o expira el max event age:
+- Si hay **DLQ** o **Destinations** configurados → el evento va ahí.
+- Si no → se **descarta silenciosamente**.
+
+---
+
+### 7.4) DLQ vs Lambda Destinations
+
+| Feature | Captura | Destinos |
+|---|---|---|
+| **Dead Letter Queue (DLQ)** | Solo fallos | SQS, SNS |
+| **Lambda Destinations** (recomendado) | **OnSuccess** + **OnFailure** por separado | SQS, SNS, Lambda, EventBridge |
+
+> 🎯 **Examen**: si te dan opciones DLQ vs Destinations, **Destinations** es la respuesta moderna recomendada por AWS (desde 2019).
+
+Ambas requieren **permisos IAM** correctos en el execution role de la Lambda (`sqs:SendMessage`, `sns:Publish`, etc.).
+
+---
+
+### 7.5) IDEMPOTENCIA (lo más importante de esta sección)
+
+> Una función es **idempotente** si ejecutarla N veces con el mismo input produce el mismo resultado que ejecutarla 1 vez.
+
+#### Por qué es CRÍTICO en invocación asíncrona
+Lambda garantiza entrega **at-least-once**, NO exactly-once. El mismo evento puede procesarse más de una vez por:
+1. **Reintentos automáticos** ante errores.
+2. **Duplicados raros** del sistema distribuido.
+3. **Errores transitorios** invisibles (timeouts, throttling).
+
+#### Qué pasa si NO sos idempotente
+- Cobros duplicados a clientes
+- Emails repetidos
+- Filas duplicadas en DB
+- Inventario descontado N veces
+
+#### Patrones para garantizar idempotencia
+1. **Idempotency key**: usar `event.id` o hash del evento como clave en DynamoDB.
+2. **Conditional writes**: `attribute_not_exists(eventId)` en DynamoDB.
+3. **Operaciones naturalmente idempotentes**: `UPDATE` con WHERE específico, `PUT` (no `INSERT`).
+4. **AWS Powertools for Lambda**: decorador `@idempotent` que maneja todo.
+
+#### Ejemplo
+```javascript
+exports.handler = async (event) => {
+  const eventId = event.Records[0].responseElements["x-amz-request-id"];
+
+  if (await alreadyProcessed(eventId)) return; // ← protección
+
+  await doWork();
+  await markAsProcessed(eventId);
+};
+```
+
+---
+
+### 7.6) Servicios que invocan asíncronamente (memorizar)
+
+- **S3** (object created, deleted, etc.)
+- **SNS**
+- **EventBridge** (eventos de servicios AWS + cron)
+- **CloudWatch Logs** (subscription filters)
+- **SES** (incoming email)
+- **CodeCommit** (triggers)
+- **IoT Core**
+
+---
+
+### 7.7) Checklist de examen — Sección 7
+
+- [ ] Invocación asíncrona = el caller NO espera respuesta (HTTP 202)
+- [ ] La cola de eventos es **interna de Lambda**, invisible
+- [ ] **At-least-once** delivery → puede haber duplicados → **idempotencia obligatoria**
+- [ ] Reintentos default: **2 reintentos = 3 intentos totales**
+- [ ] Tiempo entre reintentos: ~1 min, luego ~2 min (no configurable)
+- [ ] Max event age default: **6 horas** (configurable 60s - 6h)
+- [ ] Después de fallar todo → DLQ o Destinations (si no → descartado)
+- [ ] **DLQ**: SQS o SNS, solo fallos
+- [ ] **Destinations** (recomendado): SQS, SNS, Lambda, EventBridge — OnSuccess + OnFailure
+- [ ] Servicios push asíncronos clave: **S3, SNS, EventBridge**
+- [ ] Diferencia vs Event Source Mapping: asíncrono = servicio PUSH; ESM = Lambda POLL
