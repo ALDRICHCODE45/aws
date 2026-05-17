@@ -24,11 +24,15 @@ Avanzar rápido, pero con fundamentos fuertes:
   - EC2 Storage Deep Dive (`09-ec2-storage-deep-dive.md`): EBS/AMI/Instance Store/EFS, Multi-Attach y trampas de examen.
    - ECS — Elastic Container Service (`10-ecs-container-service.md`): Clusters, Services, Task Definitions, Fargate vs EC2, despliegues, ECR.
    - Cognito — Identity & Authentication (`11-cognito-identity.md`): User Pools, Identity Pools, tokens, triggers, integración con DynamoDB.
+   - Lambda — índice (`12-lambda.md`): apunta a la carpeta `05-lambda/`.
 - `02-labs/`
   - Ejercicios prácticos y mini-proyectos con AWS CLI/IaC/código.
 - `04-architectures/`
   - Patrones de arquitectura típicos de AWS con foco en examen. Cada arquitectura en su propio archivo.
   - Web App 3 niveles (`01-3-tier-web-app.md`): ELB + EC2 + ElastiCache + RDS, Multi-AZ, Auto Scaling.
+- `05-lambda/`
+  - Apuntes de Lambda separados por sub-tema. Archivos chicos para repaso rápido.
+  - Fundamentos, ALB sync, async + idempotencia, EventBridge (más por venir).
 - `03-exam/`
   - Resúmenes de alto impacto, preguntas tipo examen y errores frecuentes.
   - Incluye: `regions-az-edge-repaso-practico.md` para repaso rápido del bloque 1.
