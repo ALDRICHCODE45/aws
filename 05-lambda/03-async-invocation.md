@@ -60,6 +60,14 @@ Si fallan todos los intentos:
 
 > 🎯 Examen: **Destinations** es la respuesta moderna recomendada.
 
+### Ajuste importante (examen)
+
+- En invocación asíncrona podés configurar destino de **éxito (OnSuccess)** y de **fallo (OnFailure)**.
+- Para **OnFailure**, también existe **cola de mensajes fallidos (Dead Letter Queue, DLQ)** como alternativa.
+- **AWS** recomienda Destinations porque guarda más contexto de invocación (request/response).
+- **DLQ** sigue siendo válida, pero más limitada.
+- Si el origen es **Amazon Simple Queue Service (Amazon SQS)** como event source mapping, la DLQ se configura en la **cola SQS**, no en Lambda.
+
 Ambos requieren permisos IAM en el execution role.
 
 ---
