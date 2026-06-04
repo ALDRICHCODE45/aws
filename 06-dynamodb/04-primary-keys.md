@@ -33,8 +33,8 @@ Si usás una partition key con poca diversidad (ej: `pais` y el 90% son `AR`):
 
 ### Buenos vs malos ejemplos
 
-| Buena Partition Key | Mala Partition Key |
-|---------------------|--------------------|
+| Buena Partition Key | Mala Partition Key        |
+| ------------------- | ------------------------- |
 | `user_id` (UUID)    | `status` (solo 3 valores) |
 | `order_id`          | `country`                 |
 | `device_id`         | `tipo_cliente`            |
@@ -91,14 +91,14 @@ Y los departamentos están **numerados en orden** → preguntar "edificio 5, dep
 
 ## Cuándo usar cada una
 
-| Caso                                              | Opción                |
-|---------------------------------------------------|-----------------------|
-| Items independientes sin relaciones               | Solo Partition Key    |
-| Agrupar items relacionados y consultarlos juntos  | Partition + Sort      |
-| Tabla de usuarios                                 | `user_id`             |
-| Pedidos de un usuario                             | `user_id` + `order_id` |
-| Mensajes de un chat ordenados por fecha           | `chat_id` + `timestamp` |
-| Posts de un usuario con paginación                | `user_id` + `post_timestamp` |
+| Caso                                             | Opción                       |
+| ------------------------------------------------ | ---------------------------- |
+| Items independientes sin relaciones              | Solo Partition Key           |
+| Agrupar items relacionados y consultarlos juntos | Partition + Sort             |
+| Tabla de usuarios                                | `user_id`                    |
+| Pedidos de un usuario                            | `user_id` + `order_id`       |
+| Mensajes de un chat ordenados por fecha          | `chat_id` + `timestamp`      |
+| Posts de un usuario con paginación               | `user_id` + `post_timestamp` |
 
 > **Pista del examen:** si dice "ordenados por X" o "todos los X de un Y" → casi seguro Partition + Sort.
 

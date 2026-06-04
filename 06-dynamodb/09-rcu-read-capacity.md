@@ -1,16 +1,17 @@
 # DynamoDB — RCU (Read Capacity Units)
 
-Cálculo de capacidad de **lectura** en modo Provisioned. Más complejo que WCU porque tiene **2 variables**: tamaño del item Y tipo de consistencia.
+Cálculo de capacidad de **lectura** en modo Provisioned. Más complejo que WCU porque tiene **2 variables**:
+tamaño del item Y tipo de consistencia.
 
 ---
 
 ## Por qué RCU es más difícil que WCU
 
-| WCU                            | RCU                              |
-|--------------------------------|----------------------------------|
-| 1 sola pregunta: tamaño        | 2 preguntas: tamaño Y consistencia |
-| Bloques de **1 KB**            | Bloques de **4 KB**              |
-| Sin variantes                  | Strongly vs Eventually           |
+| WCU                     | RCU                                |
+| ----------------------- | ---------------------------------- |
+| 1 sola pregunta: tamaño | 2 preguntas: tamaño Y consistencia |
+| Bloques de **1 KB**     | Bloques de **4 KB**                |
+| Sin variantes           | Strongly vs Eventually             |
 
 ---
 
@@ -19,7 +20,7 @@ Cálculo de capacidad de **lectura** en modo Provisioned. Más complejo que WCU 
 ### Regla 1 — bloques de 4 KB, redondeo HACIA ARRIBA
 
 | Tamaño real | Bloques de 4 KB |
-|-------------|-----------------|
+| ----------- | --------------- |
 | 1 KB        | 1               |
 | 4 KB        | 1               |
 | 4.1 KB      | 2               |
@@ -33,11 +34,11 @@ Cálculo de capacidad de **lectura** en modo Provisioned. Más complejo que WCU 
 
 ### Regla 2 — tipo de lectura cambia el costo por bloque
 
-| Tipo                  | Costo por bloque de 4 KB |
-|-----------------------|--------------------------|
-| Strongly consistent   | **1 RCU**                |
+| Tipo                  | Costo por bloque de 4 KB             |
+| --------------------- | ------------------------------------ |
+| Strongly consistent   | **1 RCU**                            |
 | Eventually consistent | **0.5 RCU** (= 2 lecturas por 1 RCU) |
-| Transactional read    | **2 RCU**                |
+| Transactional read    | **2 RCU**                            |
 
 ---
 
@@ -107,12 +108,12 @@ Strongly: factor 1
 
 ## Comparativa rápida WCU vs RCU
 
-| Aspecto              | WCU                | RCU                                |
-|----------------------|--------------------|------------------------------------|
-| Tamaño de bloque     | **1 KB**           | **4 KB**                           |
-| Tipos de lectura     | (no aplica)        | Strongly / Eventually / Transactional |
-| Redondeo del tamaño  | Hacia arriba a 1 KB | Hacia arriba a 4 KB               |
-| Conversión a segundos| Sí                 | Sí                                 |
+| Aspecto               | WCU                 | RCU                                   |
+| --------------------- | ------------------- | ------------------------------------- |
+| Tamaño de bloque      | **1 KB**            | **4 KB**                              |
+| Tipos de lectura      | (no aplica)         | Strongly / Eventually / Transactional |
+| Redondeo del tamaño   | Hacia arriba a 1 KB | Hacia arriba a 4 KB                   |
+| Conversión a segundos | Sí                  | Sí                                    |
 
 > **Trampa clásica:** mezclar bloques entre WCU y RCU. WCU = 1 KB, RCU = 4 KB. SIEMPRE.
 

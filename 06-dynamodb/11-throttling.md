@@ -74,15 +74,38 @@ Es como pulgares y dedos: todos los pulgares son dedos, pero no todos los dedos 
   - `date` → `date#0`, `date#1`, ..., `date#9`
   - Distribuye un volumen alto entre N particiones.
 
-### Para Hot Key → cache (DAX)
+### Para Hot Key → cache (DAX), NO cambiar la PK
 
-Si el problema es UN item muy leído, no se resuelve repartiendo. Lo resolvés cacheando:
+**Error común**: pensar que Hot Key significa "elegí mal la PK". NO necesariamente.
 
-- **DAX (DynamoDB Accelerator)** = cache en memoria delante de DynamoDB.
+Ejemplo: `user_id` como PK puede ser una excelente elección con millones de usuarios. Pero si un usuario específico se vuelve viral (pensá en Messi publicando algo), ESA clave recibe el 80% de las lecturas. **La PK está bien diseñada — el problema es un patrón de acceso puntual.**
+
+Cambiar la PK implicaría:
+- Rediseñar toda la tabla
+- Migrar todos los datos
+- Cambiar todas las queries de la aplicación
+
+Eso es **nuclear** y no resuelve el problema — mañana otro usuario se vuelve viral y estás igual.
+
+**La solución correcta es DAX (DynamoDB Accelerator):**
+
+- Cache en memoria que se pone **delante** de DynamoDB.
 - Los items populares se devuelven desde RAM en **microsegundos**.
 - La partición se libera porque las lecturas no la tocan.
+- No cambiás NADA del modelo de datos.
 
 > Por eso la diapo dice: *"Si hay problemas de RCU, podemos utilizar DAX"*.
+
+### Cuándo SÍ cambiar la PK
+
+Solo cuando el problema es **Hot Partition por mal diseño** — la PK tiene poca cardinalidad desde el inicio.
+
+Ejemplo: usar `country_code` como PK cuando el 90% de tus usuarios son de Argentina → la partición "AR" está siempre saturada. Acá sí, el diseño de la PK es el problema.
+
+| Problema | ¿Cambiar PK? | Solución real |
+|---|---|---|
+| Hot Key (usuario viral) | **NO** | DAX (cache) |
+| Hot Partition (PK con poca cardinalidad) | **SÍ** | Rediseñar PK / write sharding |
 
 ### Para items grandes → rediseño de datos
 

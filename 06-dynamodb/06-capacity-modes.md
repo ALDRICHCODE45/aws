@@ -9,12 +9,13 @@ Controla cómo se gestiona la capacidad de lectura/escritura de la tabla. Es una
 ### Cómo funciona
 
 - Vos especificás el número de **lecturas y escrituras por segundo** que esperás.
-- Pagás por **RCU (Read Capacity Units)** y **WCU (Write Capacity Units)** *reservadas*, las uses o no.
+- Pagás por **RCU (Read Capacity Units)** y **WCU (Write Capacity Units)** _reservadas_, las uses o no.
 - Podés activar **autoescalado** para que ajuste RCU/WCU según métricas de CloudWatch.
 
 ### Cuándo conviene
 
 Cargas **predecibles y estables**:
+
 - Apps internas con tráfico constante.
 - Backends con patrones diarios conocidos (ej: más uso en horario laboral).
 
@@ -26,6 +27,7 @@ Cargas **predecibles y estables**:
 ### Trampa del autoescalado
 
 El autoescalado de Provisioned **NO es instantáneo**:
+
 - Reacciona a métricas de CloudWatch.
 - Tarda **minutos** en subir la capacidad.
 - Si el pico dura 30 segundos → no llega a tiempo → **throttling igual**.
@@ -51,6 +53,7 @@ Si superás tu capacidad provisionada, DynamoDB tira de esa reserva acumulada an
 > Burst Capacity = capacidad **no usada** en los últimos **300 segundos**.
 
 Ejemplo:
+
 - Provisionaste 10 RCU.
 - Usaste solo 4 RCU/s promedio en los últimos 5 minutos.
 - Se acumularon **6 RCU × 300s = 1800 RCU** de ráfaga.
@@ -69,7 +72,7 @@ Si solo se cumple (1) pero todavía hay burst → **NO hay error**, DynamoDB usa
 
 #### Limitaciones
 
-- **AWS no garantiza la ráfaga.** Docs oficiales: *"reserved for background maintenance, may not always be available"*.
+- **AWS no garantiza la ráfaga.** Docs oficiales: _"reserved for background maintenance, may not always be available"_.
 - **No la uses como estrategia.** Es un colchón, no una solución.
 - Si tu tráfico supera lo provisionado de forma **sostenida**, te quedás sin ráfaga rápido.
 
@@ -118,14 +121,14 @@ Si solo se cumple (1) pero todavía hay burst → **NO hay error**, DynamoDB usa
 
 ## Tabla de decisión rápida
 
-| Situación                                            | Modo correcto             |
-|------------------------------------------------------|---------------------------|
-| Tráfico estable y predecible                         | **Provisioned**           |
-| Patrones diarios conocidos (ej: oficina 9-18h)       | Provisioned + autoescalado |
-| Black Friday, viral en Twitter, picos impredecibles  | **On-Demand**             |
-| App nueva, tráfico desconocido                       | **On-Demand**             |
-| Dev / test                                           | **On-Demand**             |
-| Carga constante 24/7 con uso alto                    | **Provisioned**           |
+| Situación                                           | Modo correcto              |
+| --------------------------------------------------- | -------------------------- |
+| Tráfico estable y predecible                        | **Provisioned**            |
+| Patrones diarios conocidos (ej: oficina 9-18h)      | Provisioned + autoescalado |
+| Black Friday, viral en Twitter, picos impredecibles | **On-Demand**              |
+| App nueva, tráfico desconocido                      | **On-Demand**              |
+| Dev / test                                          | **On-Demand**              |
+| Carga constante 24/7 con uso alto                   | **Provisioned**            |
 
 ---
 
@@ -133,8 +136,8 @@ Si solo se cumple (1) pero todavía hay burst → **NO hay error**, DynamoDB usa
 
 Mención breve, se profundiza en su propio apunte cuando aparezca en el curso:
 
-- **RCU (Read Capacity Unit)** → 1 lectura *eventually consistent* de hasta **4 KB** por segundo.
-  (O 0.5 lectura *strongly consistent*.)
+- **RCU (Read Capacity Unit)** → 1 lectura _eventually consistent_ de hasta **4 KB** por segundo.
+  (O 0.5 lectura _strongly consistent_.)
 - **WCU (Write Capacity Unit)** → 1 escritura de hasta **1 KB** por segundo.
 
 Vas a tener que calcularlos en el examen a partir del tamaño de los items y del tipo de lectura.
