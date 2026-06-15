@@ -23,25 +23,26 @@ API Gateway puede guardar las respuestas de tus endpoints en una **caché intern
 **Esto es CRÍTICO**: la cache se habilita en un **stage** específico (`dev`, `prod`, etc.), no a nivel API global.
 
 Consecuencia práctica:
+
 - Podés tener cache habilitada en `prod` y deshabilitada en `dev`.
 - Cada stage tiene SU propia cache, independiente de los otros.
 - La cache es CARA → casi siempre solo tiene sentido en `prod`.
 
 ### TTL (Time To Live)
 
-| Valor       | Comportamiento                                          |
-| ----------- | ------------------------------------------------------- |
-| **Default** | **300 segundos (5 minutos)**                            |
-| **Mínimo**  | **0 segundos** → equivale a **cache desactivada**       |
-| **Máximo**  | **3600 segundos (1 hora)**                              |
+| Valor       | Comportamiento                                    |
+| ----------- | ------------------------------------------------- |
+| **Default** | **300 segundos (5 minutos)**                      |
+| **Mínimo**  | **0 segundos** → equivale a **cache desactivada** |
+| **Máximo**  | **3600 segundos (1 hora)**                        |
 
 > **Trampa**: TTL = 0 NO significa "cache infinita", significa "no cachear". Si querés desactivar la cache de un endpoint específico, ponele TTL = 0.
 
 ### Capacidad
 
-| Rango                                           |
-| ----------------------------------------------- |
-| **0.5 GB (mínimo) hasta 237 GB (máximo)**       |
+| Rango                                     |
+| ----------------------------------------- |
+| **0.5 GB (mínimo) hasta 237 GB (máximo)** |
 
 Elegís el tamaño al habilitar la cache en el stage. **Más cache = más caro**.
 
@@ -65,6 +66,7 @@ API Gateway necesita decidir si dos requests pueden compartir la misma respuesta
 - Opcionalmente podés agregar: **query string parameters**, **headers**, **stage variables**.
 
 Ejemplo: si marcás `?userId` como cache key, entonces:
+
 - `GET /orders?userId=1` y `GET /orders?userId=2` se cachean por separado.
 - Si NO lo marcás, los dos comparten la misma cache → BUG grave (el user 2 ve los pedidos del user 1).
 
@@ -132,7 +134,9 @@ Restringís quién puede invalidar la cache con una policy:
     {
       "Effect": "Allow",
       "Action": ["execute-api:InvalidateCache"],
-      "Resource": ["arn:aws:execute-api:region:account-id:api-id/stage-name/GET/resource-path"]
+      "Resource": [
+        "arn:aws:execute-api:region:account-id:api-id/stage-name/GET/resource-path"
+      ]
     }
   ]
 }
@@ -144,10 +148,10 @@ Restringís quién puede invalidar la cache con una policy:
 
 En la consola, cuando habilitás cache, configurás el comportamiento ante el header `Cache-Control: max-age=0`:
 
-| Opción                                          | Quién puede invalidar              | Qué pasa si un cliente NO autorizado manda el header |
-| ----------------------------------------------- | ---------------------------------- | ---------------------------------------------------- |
-| **Require authorization (recomendado)**         | Solo con policy `InvalidateCache`  | API Gateway rechaza con **403** o lo **ignora**      |
-| **No authorization required (default histórico)** | **Cualquiera** (PELIGROSO)         | El header siempre se respeta                         |
+| Opción                                            | Quién puede invalidar             | Qué pasa si un cliente NO autorizado manda el header |
+| ------------------------------------------------- | --------------------------------- | ---------------------------------------------------- |
+| **Require authorization (recomendado)**           | Solo con policy `InvalidateCache` | API Gateway rechaza con **403** o lo **ignora**      |
+| **No authorization required (default histórico)** | **Cualquiera** (PELIGROSO)        | El header siempre se respeta                         |
 
 Y dentro de "Require authorization", una sub-opción:
 
@@ -156,12 +160,12 @@ Y dentro de "Require authorization", una sub-opción:
 
 ## Resumen mental — cuándo se invalida la cache
 
-| Causa                                              | Quién lo hace                          |
-| -------------------------------------------------- | -------------------------------------- |
-| Expira el TTL                                      | Automático                             |
-| Flush manual del stage                             | Admin desde consola/CLI                |
-| Header `Cache-Control: max-age=0`                  | Cliente (si tiene permiso `InvalidateCache`) |
-| Update del stage que modifica config de cache      | Automático al re-deploy                |
+| Causa                                         | Quién lo hace                                |
+| --------------------------------------------- | -------------------------------------------- |
+| Expira el TTL                                 | Automático                                   |
+| Flush manual del stage                        | Admin desde consola/CLI                      |
+| Header `Cache-Control: max-age=0`             | Cliente (si tiene permiso `InvalidateCache`) |
+| Update del stage que modifica config de cache | Automático al re-deploy                      |
 
 ## Trampas de examen
 
