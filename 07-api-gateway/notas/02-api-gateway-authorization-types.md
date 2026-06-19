@@ -29,3 +29,31 @@
 **API Keys NO autentican, solo identifican.** Si la pregunta dice "autenticar otra cuenta/usuario" y la opción es API Keys → descarte.
 
 API Keys + Usage Plans = tiers comerciales (Free/Pro), NO autenticación.
+
+## Códigos HTTP en API Gateway — mapeo
+
+| Código | Causa |
+| ------ | ----- |
+| **429** Too Many Requests | **Throttling** (rate limit / cuota usage plan) |
+| **502** Bad Gateway | Lambda devolvió respuesta mal formada |
+| **503** Service Unavailable | Servicio AWS caído (raro) |
+| **504** Gateway Timeout | **Backend > 29s** (timeout de API GW) |
+| **403** Forbidden | API Key inválida / sin permiso al stage/método |
+| **401** Unauthorized | Token mal o no provisto |
+
+## Timeout límite
+
+API Gateway tiene **timeout fijo de 29 segundos** para llamar al backend.
+
+| | Timeout máximo |
+| -- | -------------- |
+| Lambda función sola | 15 minutos |
+| **Lambda detrás de API GW** | **29 segundos** |
+
+Síntomas típicos en picos de tráfico:
+- Cold starts → Lambdas más lentas → 504.
+- DynamoDB throttling → retries → Lambda > 29s → 504.
+
+## Trampa común
+
+"Aumento de tráfico + 504" → suena a throttling pero **throttling = 429**. 504 es SIEMPRE timeout.
