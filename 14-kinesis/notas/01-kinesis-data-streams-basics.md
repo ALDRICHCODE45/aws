@@ -16,11 +16,11 @@ Para que los datos de un sensor lleguen ordenados → usar `sensor_id` como part
 
 ## Disparadores
 
-| Pregunta dice | Respuesta |
-| ------------- | --------- |
-| "stream con N shards" + "orden" | **Orden dentro del shard solamente** |
-| "datos del mismo X en orden" | Usar X como **partition key** |
-| "throughput insuficiente" | **Aumentar shards** (resharding) |
+| Pregunta dice                     | Respuesta                                      |
+| --------------------------------- | ---------------------------------------------- |
+| "stream con N shards" + "orden"   | **Orden dentro del shard solamente**           |
+| "datos del mismo X en orden"      | Usar X como **partition key**                  |
+| "throughput insuficiente"         | **Aumentar shards** (resharding)               |
 | "registros perdidos / reprocesar" | Aumentar **retention** (default 24h, max 365d) |
 
 ## Trampas
@@ -31,9 +31,9 @@ Para que los datos de un sensor lleguen ordenados → usar `sensor_id` como part
 
 ## Kinesis vs otros
 
-| Servicio | Cuándo |
-| -------- | ------ |
-| **Kinesis Data Streams** | Real-time con orden por key, múltiples consumidores, replay |
-| **Kinesis Data Firehose** | Cargar a S3/Redshift/OpenSearch sin código |
-| **SQS** | Cola 1-a-1 |
-| **SNS** | Pub/Sub fan-out |
+| Servicio                  | Cuándo                                                      |
+| ------------------------- | ----------------------------------------------------------- |
+| **Kinesis Data Streams**  | Real-time con orden por key, múltiples consumidores, replay |
+| **Kinesis Data Firehose** | Cargar a S3/Redshift/OpenSearch sin código                  |
+| **SQS**                   | Cola 1-a-1                                                  |
+| **SNS**                   | Pub/Sub fan-out                                             |

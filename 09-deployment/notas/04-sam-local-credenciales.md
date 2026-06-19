@@ -13,8 +13,8 @@ sam local invoke Func --profile sandbox  # SAM usa ese perfil
 
 ## Trampas
 
-| Opción que aparece | Por qué descartar |
-| ------------------ | ----------------- |
-| Credenciales en `Globals` del template.yml | Secretos en código versionado. Anti-pattern. |
-| `--parameter-overrides` | Es para parámetros de CFN, NO credenciales. |
-| Crear archivo local custom con env vars | No es el mecanismo estándar. SAM usa `~/.aws/credentials`. |
+| Opción que aparece                         | Por qué descartar                                          |
+| ------------------------------------------ | ---------------------------------------------------------- |
+| Credenciales en `Globals` del template.yml | Secretos en código versionado. Anti-pattern.               |
+| `--parameter-overrides`                    | Es para parámetros de CFN, NO credenciales.                |
+| Crear archivo local custom con env vars    | No es el mecanismo estándar. SAM usa `~/.aws/credentials`. |

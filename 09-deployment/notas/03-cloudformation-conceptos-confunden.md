@@ -1,11 +1,11 @@
 # CloudFormation — 4 conceptos que confunden
 
-| Concepto | Tiempo | Para qué |
-| -------- | ------ | -------- |
-| **Change Set** | FUTURO | Preview de cambios antes de aplicar |
-| **Direct Update** | AHORA | Aplica cambios directo (sin red) |
-| **Drift Detection** | PASADO | Detecta cambios manuales ya hechos |
-| **StackSet** | N/A | Replica stack en N cuentas + regiones |
+| Concepto            | Tiempo | Para qué                              |
+| ------------------- | ------ | ------------------------------------- |
+| **Change Set**      | FUTURO | Preview de cambios antes de aplicar   |
+| **Direct Update**   | AHORA  | Aplica cambios directo (sin red)      |
+| **Drift Detection** | PASADO | Detecta cambios manuales ya hechos    |
+| **StackSet**        | N/A    | Replica stack en N cuentas + regiones |
 
 ## Disparadores
 

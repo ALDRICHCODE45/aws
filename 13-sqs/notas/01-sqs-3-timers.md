@@ -1,21 +1,21 @@
 # SQS — Los 3 timers que confunden
 
-| Timer | Cuándo aplica | Max |
-| ----- | ------------- | --- |
-| **Delivery Delay** | Mensaje **ENTRA** a la cola (oculto al agregarse) | 15 min |
-| **Visibility Timeout** | Mensaje **SE LEE** (oculto a otros consumidores mientras se procesa) | 12 horas |
-| **Long Polling (Receive Wait)** | Consumidor **PREGUNTA** y espera respuesta | 20 s |
+| Timer                           | Cuándo aplica                                                        | Max      |
+| ------------------------------- | -------------------------------------------------------------------- | -------- |
+| **Delivery Delay**              | Mensaje **ENTRA** a la cola (oculto al agregarse)                    | 15 min   |
+| **Visibility Timeout**          | Mensaje **SE LEE** (oculto a otros consumidores mientras se procesa) | 12 horas |
+| **Long Polling (Receive Wait)** | Consumidor **PREGUNTA** y espera respuesta                           | 20 s     |
 
 ## Disparadores
 
-| Pregunta dice | Timer |
-| ------------- | ----- |
-| "ocultar al **agregarse / enviarse**" | **Delivery Delay** |
-| "esperar antes de la primera lectura" | **Delivery Delay** |
-| "dar tiempo a sistema X antes de procesar" | **Delivery Delay** |
+| Pregunta dice                                     | Timer                  |
+| ------------------------------------------------- | ---------------------- |
+| "ocultar al **agregarse / enviarse**"             | **Delivery Delay**     |
+| "esperar antes de la primera lectura"             | **Delivery Delay**     |
+| "dar tiempo a sistema X antes de procesar"        | **Delivery Delay**     |
 | "evitar que **otro consumidor** procese el mismo" | **Visibility Timeout** |
-| "ocultar mientras **se está procesando**" | **Visibility Timeout** |
-| "consumidor espera al hacer poll" | **Long Polling** |
+| "ocultar mientras **se está procesando**"         | **Visibility Timeout** |
+| "consumidor espera al hacer poll"                 | **Long Polling**       |
 
 ## Analogía del buzón
 

@@ -2,12 +2,12 @@
 
 ## Annotations vs Metadata
 
-| | Annotations | Metadata |
-| -- | ----------- | -------- |
-| **Indexado / filtrable** | ✅ Sí | ❌ No |
-| Tipos | String, Number, Boolean | Cualquier JSON |
-| Max por trace | 50 | Sin límite estricto |
-| Uso | **Filtrar/buscar** trazas en consola | Info adicional para debug |
+|                          | Annotations                          | Metadata                  |
+| ------------------------ | ------------------------------------ | ------------------------- |
+| **Indexado / filtrable** | ✅ Sí                                | ❌ No                     |
+| Tipos                    | String, Number, Boolean              | Cualquier JSON            |
+| Max por trace            | 50                                   | Sin límite estricto       |
+| Uso                      | **Filtrar/buscar** trazas en consola | Info adicional para debug |
 
 ## Regla rápida
 
@@ -16,12 +16,12 @@
 
 ## Disparadores
 
-| Pregunta dice | Concepto |
-| ------------- | -------- |
-| "filtrar trazas" / "expresiones de filtro" / "buscar por atributo" | **Annotations** |
-| "info adicional" / "detalles para debugging" | **Metadata** |
-| "controlar la tasa de captura" | **Sampling rules** |
-| "reducir costo de X-Ray" | **Sampling** |
+| Pregunta dice                                                      | Concepto           |
+| ------------------------------------------------------------------ | ------------------ |
+| "filtrar trazas" / "expresiones de filtro" / "buscar por atributo" | **Annotations**    |
+| "info adicional" / "detalles para debugging"                       | **Metadata**       |
+| "controlar la tasa de captura"                                     | **Sampling rules** |
+| "reducir costo de X-Ray"                                           | **Sampling**       |
 
 ## Sampling
 

@@ -2,22 +2,22 @@
 
 ## Tabla comparativa
 
-| | Parameter Store SecureString | Secrets Manager | CloudHSM |
-| -- | --------------------------- | --------------- | -------- |
-| Cifrado KMS | ✅ | ✅ | HSM dedicado |
-| **Rotación automática** | ❌ Manual | ✅ Auto | N/A |
-| Integración RDS/Aurora/Redshift | ❌ | ✅ nativa | ❌ |
-| Generar password aleatoria | ❌ | ✅ | ❌ |
-| Costo | **Gratis** (estándar) | $0.40/mes/secret | **$$$** |
+|                                 | Parameter Store SecureString | Secrets Manager  | CloudHSM     |
+| ------------------------------- | ---------------------------- | ---------------- | ------------ |
+| Cifrado KMS                     | ✅                           | ✅               | HSM dedicado |
+| **Rotación automática**         | ❌ Manual                    | ✅ Auto          | N/A          |
+| Integración RDS/Aurora/Redshift | ❌                           | ✅ nativa        | ❌           |
+| Generar password aleatoria      | ❌                           | ✅               | ❌           |
+| Costo                           | **Gratis** (estándar)        | $0.40/mes/secret | **$$$**      |
 
 ## Disparadores
 
-| Pregunta menciona | Servicio |
-| ----------------- | -------- |
+| Pregunta menciona                                            | Servicio                         |
+| ------------------------------------------------------------ | -------------------------------- |
 | "almacenar config / connection string / API key" + "cifrado" | **Parameter Store SecureString** |
-| "**rotación automática**" / "credenciales DB que rotan" | **Secrets Manager** |
-| "generar password aleatoria" | **Secrets Manager** |
-| "compliance FIPS 140-2 Level 3" / "HSM dedicado" | **CloudHSM** |
+| "**rotación automática**" / "credenciales DB que rotan"      | **Secrets Manager**              |
+| "generar password aleatoria"                                 | **Secrets Manager**              |
+| "compliance FIPS 140-2 Level 3" / "HSM dedicado"             | **CloudHSM**                     |
 
 ## Trampas
 

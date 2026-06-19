@@ -2,11 +2,11 @@
 
 Solo existen **3** estrategias reales. `azBalanced` y similares son trampa por inexistencia.
 
-| Estrategia | Para qué |
-| ---------- | -------- |
-| **`binpack`** | Reducir costo / menos instancias / eficiencia CPU+memoria |
-| **`spread`** | Alta disponibilidad / tolerancia a fallos / distribuir entre AZs |
-| **`random`** | Testing/dev. Nunca prod. |
+| Estrategia    | Para qué                                                         |
+| ------------- | ---------------------------------------------------------------- |
+| **`binpack`** | Reducir costo / menos instancias / eficiencia CPU+memoria        |
+| **`spread`**  | Alta disponibilidad / tolerancia a fallos / distribuir entre AZs |
+| **`random`**  | Testing/dev. Nunca prod.                                         |
 
 ## Trampa cognitiva
 

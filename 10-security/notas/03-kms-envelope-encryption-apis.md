@@ -1,12 +1,12 @@
 # KMS — Envelope Encryption APIs
 
-| API | Devuelve | Cuándo |
-| --- | -------- | ------ |
-| `GenerateDataKey` | Plaintext + Encrypted | Cifrar **AHORA** |
-| `GenerateDataKeyWithoutPlaintext` | Solo Encrypted | Cifrar **DESPUÉS** (pedís Decrypt cuando lo necesites) |
-| `Encrypt` | Cifra datos pequeños (**<4 KB**) directo | Secreto chico, NO archivos |
-| `Decrypt` | Plaintext de una key cifrada | Recuperar plaintext para usarlo |
-| `GenerateRandom` | Bytes aleatorios | Randomness, NO cifrado |
+| API                               | Devuelve                                 | Cuándo                                                 |
+| --------------------------------- | ---------------------------------------- | ------------------------------------------------------ |
+| `GenerateDataKey`                 | Plaintext + Encrypted                    | Cifrar **AHORA**                                       |
+| `GenerateDataKeyWithoutPlaintext` | Solo Encrypted                           | Cifrar **DESPUÉS** (pedís Decrypt cuando lo necesites) |
+| `Encrypt`                         | Cifra datos pequeños (**<4 KB**) directo | Secreto chico, NO archivos                             |
+| `Decrypt`                         | Plaintext de una key cifrada             | Recuperar plaintext para usarlo                        |
+| `GenerateRandom`                  | Bytes aleatorios                         | Randomness, NO cifrado                                 |
 
 ## Disparadores
 

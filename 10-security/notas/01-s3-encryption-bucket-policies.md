@@ -2,11 +2,11 @@
 
 ## Tipos SSE → header
 
-| Tipo | Header |
-| ---- | ------ |
-| SSE-S3 | `x-amz-server-side-encryption: AES256` |
-| SSE-KMS | `x-amz-server-side-encryption: aws:kms` |
-| SSE-KMS con CMK específica | `x-amz-server-side-encryption-aws-kms-key-id` |
+| Tipo                          | Header                                                                  |
+| ----------------------------- | ----------------------------------------------------------------------- |
+| SSE-S3                        | `x-amz-server-side-encryption: AES256`                                  |
+| SSE-KMS                       | `x-amz-server-side-encryption: aws:kms`                                 |
+| SSE-KMS con CMK específica    | `x-amz-server-side-encryption-aws-kms-key-id`                           |
 | **SSE-C** (clave del cliente) | `x-amz-server-side-encryption-customer-key` + `-algorithm` + `-key-MD5` |
 
 > ⚠️ **Si ves `customer` en el header → es SSE-C**, NO SSE-S3 ni KMS. Si la pregunta pide SSE-S3 o SSE-KMS y la opción tiene `customer` → descarte automático.

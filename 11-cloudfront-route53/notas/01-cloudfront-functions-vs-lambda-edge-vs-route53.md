@@ -2,24 +2,24 @@
 
 ## Tabla disparadores
 
-| Pregunta dice | Servicio |
-| ------------- | -------- |
-| "modificar headers" / "redirect simple" / "menor costo/latencia" | **CloudFront Functions** |
-| "lógica compleja" / "consultar DB" / "transformación grande" | **Lambda@Edge** |
-| "geo-routing a backends/regiones FÍSICAMENTE distintos" | **Route 53 geo-routing** |
-| "bloquear países enteros" | **WAF geo-match** |
-| "contenido distinto por país desde el edge" (mismo backend) | **CloudFront Functions + Viewer-Country** |
+| Pregunta dice                                                    | Servicio                                  |
+| ---------------------------------------------------------------- | ----------------------------------------- |
+| "modificar headers" / "redirect simple" / "menor costo/latencia" | **CloudFront Functions**                  |
+| "lógica compleja" / "consultar DB" / "transformación grande"     | **Lambda@Edge**                           |
+| "geo-routing a backends/regiones FÍSICAMENTE distintos"          | **Route 53 geo-routing**                  |
+| "bloquear países enteros"                                        | **WAF geo-match**                         |
+| "contenido distinto por país desde el edge" (mismo backend)      | **CloudFront Functions + Viewer-Country** |
 
 ## CloudFront Functions vs Lambda@Edge
 
-| | CF Functions | Lambda@Edge |
-| -- | ----------- | ----------- |
+|                 | CF Functions                                   | Lambda@Edge                    |
+| --------------- | ---------------------------------------------- | ------------------------------ |
 | **Dónde corre** | **Edge Locations** (600+, más cercano al user) | **Regional Edge Caches** (~13) |
-| Lenguaje | **JavaScript** | Node.js + Python |
-| Tiempo | <1 ms | hasta 30s |
-| Eventos | Viewer Request/Response | + Origin Request/Response |
-| Network access | ❌ NO | ✅ SÍ |
-| Costo | **6x más barato** | Caro |
+| Lenguaje        | **JavaScript**                                 | Node.js + Python               |
+| Tiempo          | <1 ms                                          | hasta 30s                      |
+| Eventos         | Viewer Request/Response                        | + Origin Request/Response      |
+| Network access  | ❌ NO                                          | ✅ SÍ                          |
+| Costo           | **6x más barato**                              | Caro                           |
 
 > CF Functions corre en el edge más cercano = latencia mínima. Lambda@Edge va a Regional Edge = más lejos = más latencia. Por eso CF Functions gana en "menor latencia" / "más cerca del user".
 
