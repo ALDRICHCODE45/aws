@@ -27,3 +27,31 @@ Dos usuarios editando el mismo perfil, dos procesos actualizando stock, dos Lamb
 - "Evitar que dos escrituras concurrentes se sobreescriban" → **Optimistic Locking** con Conditional Writes
 - NO es un lock real (eso sería pesimista) — todos pueden intentar, solo gana el primero
 - El que pierde recibe `ConditionalCheckFailedException`, no se queda esperando
+
+## Optimistic vs Pessimistic (trampa de examen)
+
+- **Optimistic** = sin bloqueo, valida versión al escribir → rendimiento NO se afecta.
+  DynamoDB lo soporta nativamente (conditional writes + version attribute).
+- **Pessimistic** = candado/lock mientras procesás → los demás ESPERAN → MATA
+  rendimiento bajo alta concurrencia. DynamoDB NO lo soporta nativamente.
+- Keyword: "sin afectar rendimiento" + "race condition" → siempre **optimistic**.
+- "Bloqueo optimista LAXO / sin validación" → no previene overwrites. Distractor.
+
+## Pregunta de prueba
+
+Una app Java con alta concurrencia ve cómo escrituras concurrentes se pisan
+(race conditions) sobrescribiendo datos recientes. ¿Mejor estrategia SIN afectar
+significativamente el rendimiento?
+
+A) Bloqueo pesimista con candados de escritura prolongados
+B) Bloqueo optimista con control de versiones (atributo de versión)
+C) Bloqueo pesimista mediante lectura exclusiva
+D) Control de versiones sin validación explícita (optimista laxo)
+
+<details><summary>Respuesta</summary>
+
+**B** (optimistic locking con version attribute): sin bloqueo → no afecta rendimiento.
+Cuándo sería cada una:
+- **pesimista (A/C)** → los demás esperan = mata rendimiento; DynamoDB no lo soporta nativo.
+- **optimista laxo sin validación (D)** → sin validar la versión no previene los overwrites.
+</details>
