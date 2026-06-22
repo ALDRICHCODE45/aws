@@ -37,9 +37,9 @@ WBjHxNtoAb4WPKBC7cGm64CBiblb24b4jt8jJHo9
 
 **La API Key NO es autenticación. Solo identifica.**
 
-| Para… | Usás… |
-| ----- | ----- |
-| **Identificar y medir consumo** | API Key |
+| Para…                             | Usás…                           |
+| --------------------------------- | ------------------------------- |
+| **Identificar y medir consumo**   | API Key                         |
 | **Autenticar (probar quién sos)** | Cognito, IAM, Lambda Authorizer |
 
 Si en el examen ves "se necesita autenticar usuarios de la API" y la opción dice "usar API Keys" → es **TRAMPA**. La respuesta correcta va a ser Cognito o Lambda Authorizer.
@@ -58,11 +58,11 @@ Un Usage Plan es un **contrato** que dice:
 
 ### Ejemplo concreto — API de clima con 3 planes
 
-| Plan | Throttling | Quota mensual | Precio |
-| ---- | ---------- | ------------- | ------ |
-| Free | 10 req/s | 10.000 req/mes | $0 |
-| Pro | 100 req/s | 1.000.000 req/mes | $50 |
-| Enterprise | 1000 req/s | Sin límite | $500 |
+| Plan       | Throttling | Quota mensual     | Precio |
+| ---------- | ---------- | ----------------- | ------ |
+| Free       | 10 req/s   | 10.000 req/mes    | $0     |
+| Pro        | 100 req/s  | 1.000.000 req/mes | $50    |
+| Enterprise | 1000 req/s | Sin límite        | $500   |
 
 Cada fila es un **Usage Plan**. Cuando un cliente se suscribe a "Pro", le generás una API Key y la **asociás** a ese Usage Plan.
 
@@ -72,10 +72,10 @@ Cada fila es un **Usage Plan**. Cuando un cliente se suscribe a "Pro", le gener�
 
 Esto cae seguro en el examen:
 
-| Concepto | Qué limita | Ejemplo | Cuando se supera |
-| -------- | ---------- | ------- | ---------------- |
-| **Throttling (estrangulamiento)** | **Velocidad** (req/seg) | "máximo 100 req/s" | 429 al toque |
-| **Quota (cuota)** | **Volumen total** (req/mes) | "máximo 1M req/mes" | 429 hasta que se renueve el período |
+| Concepto                          | Qué limita                  | Ejemplo             | Cuando se supera                    |
+| --------------------------------- | --------------------------- | ------------------- | ----------------------------------- |
+| **Throttling (estrangulamiento)** | **Velocidad** (req/seg)     | "máximo 100 req/s"  | 429 al toque                        |
+| **Quota (cuota)**                 | **Volumen total** (req/mes) | "máximo 1M req/mes" | 429 hasta que se renueve el período |
 
 > **Analogía**: el **throttling** es el límite de velocidad de la ruta (no podés ir a más de 110 km/h en ningún momento). La **quota** es el kilometraje del alquiler (tenés 2000 km totales para todo el viaje).
 
@@ -124,11 +124,11 @@ API Gateway
 
 API Gateway aplica throttling en **3 niveles**, en cascada de afuera hacia adentro:
 
-| Nivel | Quién lo configura | Para qué sirve |
-| ----- | ------------------ | -------------- |
-| **1. Cuenta AWS (account level)** | AWS (default 10.000 req/s, 5.000 burst) | Techo global de toda tu cuenta |
-| **2. Stage / Method level** | Vos | Proteger un stage o un endpoint específico |
-| **3. Usage Plan (per API Key)** | Vos | Limitar a cada cliente individual |
+| Nivel                             | Quién lo configura                      | Para qué sirve                             |
+| --------------------------------- | --------------------------------------- | ------------------------------------------ |
+| **1. Cuenta AWS (account level)** | AWS (default 10.000 req/s, 5.000 burst) | Techo global de toda tu cuenta             |
+| **2. Stage / Method level**       | Vos                                     | Proteger un stage o un endpoint específico |
+| **3. Usage Plan (per API Key)**   | Vos                                     | Limitar a cada cliente individual          |
 
 **Regla**: gana el **más restrictivo**. Si tu cuenta soporta 10.000 req/s pero el Usage Plan dice 100 req/s, al cliente le aplican 100.
 
@@ -136,11 +136,11 @@ API Gateway aplica throttling en **3 niveles**, en cascada de afuera hacia adent
 
 ## Códigos HTTP — quién devuelve qué
 
-| Código | Cuándo |
-| ------ | ------ |
-| **200 OK** | Pasó todos los chequeos |
-| **403 Forbidden** | API Key inválida, inexistente, o sin permiso al stage/método |
-| **429 Too Many Requests** | Superó throttling (req/s) o quota (total del período) |
+| Código                    | Cuándo                                                       |
+| ------------------------- | ------------------------------------------------------------ |
+| **200 OK**                | Pasó todos los chequeos                                      |
+| **403 Forbidden**         | API Key inválida, inexistente, o sin permiso al stage/método |
+| **429 Too Many Requests** | Superó throttling (req/s) o quota (total del período)        |
 
 > No confundas: **403 = no podés** (key mala o sin acceso). **429 = pasaste el límite** (key buena pero ya consumiste de más).
 
@@ -177,32 +177,32 @@ Pensalo así: cada usuario necesitaría su propia API Key + su propio Usage Plan
 
 ### Tabla de palabras clave en el enunciado
 
-| Si la pregunta dice… | Respuesta NO es API Keys |
-| -------------------- | ------------------------ |
-| "millones de usuarios" | ❌ |
-| "por usuario individual" | ❌ |
-| "usuarios de una app móvil/web" | ❌ |
-| "autenticar usuarios finales" | ❌ |
-| "end users" | ❌ |
+| Si la pregunta dice…            | Respuesta NO es API Keys |
+| ------------------------------- | ------------------------ |
+| "millones de usuarios"          | ❌                       |
+| "por usuario individual"        | ❌                       |
+| "usuarios de una app móvil/web" | ❌                       |
+| "autenticar usuarios finales"   | ❌                       |
+| "end users"                     | ❌                       |
 
-| Si la pregunta dice… | Respuesta SÍ es API Keys |
-| -------------------- | ------------------------ |
-| "clientes comerciales" / "B2B" | ✅ |
-| "monetizar / vender la API" | ✅ |
-| "tiers / planes de uso" (Free/Pro/Enterprise) | ✅ |
-| "third-party developers / partners" | ✅ |
-| "diferentes niveles de servicio" | ✅ |
+| Si la pregunta dice…                          | Respuesta SÍ es API Keys |
+| --------------------------------------------- | ------------------------ |
+| "clientes comerciales" / "B2B"                | ✅                       |
+| "monetizar / vender la API"                   | ✅                       |
+| "tiers / planes de uso" (Free/Pro/Enterprise) | ✅                       |
+| "third-party developers / partners"           | ✅                       |
+| "diferentes niveles de servicio"              | ✅                       |
 
 ### Aclaración importante: Lambda Authorizer NO es "solo para autorizar"
 
 A pesar del nombre, **hace AMBAS**: autentica Y autoriza. Y además pasa contexto del usuario al backend, lo que te permite implementar rate limiting per-user con DynamoDB o Redis.
 
-| Función | Lambda Authorizer la hace? |
-| ------- | -------------------------- |
-| Validar token / autenticar | ✅ |
-| Devolver IAM policy (autorizar) | ✅ |
-| Pasar contexto del usuario al backend | ✅ |
-| Habilitar rate limiting per-user (custom) | ✅ |
+| Función                                   | Lambda Authorizer la hace? |
+| ----------------------------------------- | -------------------------- |
+| Validar token / autenticar                | ✅                         |
+| Devolver IAM policy (autorizar)           | ✅                         |
+| Pasar contexto del usuario al backend     | ✅                         |
+| Habilitar rate limiting per-user (custom) | ✅                         |
 
 ---
 

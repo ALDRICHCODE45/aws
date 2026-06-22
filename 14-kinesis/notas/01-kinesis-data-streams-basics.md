@@ -2,7 +2,7 @@
 
 ## Concepto base
 
-Stream dividido en **shards** (particiones). Productores escriben con una **partition key**, Kinesis hace hash → asigna shard.
+Stream atomnidividido en **shards** (particiones). Productores escriben con una **partition key**, Kinesis hace hash → asigna shard.
 
 ## Por shard
 
@@ -40,6 +40,7 @@ Para que los datos de un sensor lleguen ordenados → usar `sensor_id` como part
 - Opción que CONTRADICE un hecho del enunciado → descarte automático.
 
 ## Orden estricto + exactly-once (error simulacro #2)
+
 - **`PutRecord`** (singular) soporta **`SequenceNumberForOrdering`** → orden
   estrictamente creciente para la MISMA partition key. ES la forma de ordenar.
 - **`PutRecords`** (batch) NO garantiza orden en el lote + permite fallos parciales
@@ -52,6 +53,7 @@ Para que los datos de un sensor lleguen ordenados → usar `sensor_id` como part
   (no "sustituir por SQS FIFO").
 
 ## Consumidores
+
 - **Classic**: 2 MB/s COMPARTIDO entre todos los consumidores del shard (pull).
 - **Enhanced Fan-Out**: 2 MB/s POR consumidor (push, HTTP/2). Para muchos
   consumidores que necesitan throughput dedicado y baja latencia.
@@ -66,6 +68,7 @@ Para que los datos de un sensor lleguen ordenados → usar `sensor_id` como part
 | **SNS**                   | Pub/Sub fan-out                                             |
 
 ## Data Streams vs Firehose (la confusión #1)
+
 - ¿Replay / reprocesar / múltiples consumidores / tiempo real custom? → **Data Streams**.
 - ¿Solo entregar a S3/Redshift/OpenSearch/Splunk sin administrar? → **Firehose**
   (serverless, NO replay, near-real-time, auto-scale).
@@ -85,6 +88,7 @@ D) Kinesis tiene demasiados shards aprovisionados
 
 **B**: retención default 24h < intervalo de 48h → los registros expiran antes de leerse.
 Cuándo sería cada una:
+
 - **Redshift no sirve** → falso, es ideal para análisis histórico.
 - **EC2 falla** → el enunciado dice que está sana (contradice el dato).
 - **demasiados shards** → eso es costo/over-provisioning, no pérdida de datos.

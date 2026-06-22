@@ -4,21 +4,21 @@
 
 **"Long polling" NO es lento**. Es el cliente esperando con la conexión abierta. SQS le entrega el mensaje **APENAS llega**.
 
-| | Short polling | Long polling |
-| -- | ------------- | ------------ |
-| Espera del cliente | 0s (responde ya) | Hasta 20s con conexión abierta |
-| Latencia al llegar un mensaje | Espera al próximo poll | **Inmediata** |
-| Requests vacíos | Muchos | Pocos |
-| Costo | Más caro | Más barato |
+|                               | Short polling          | Long polling                   |
+| ----------------------------- | ---------------------- | ------------------------------ |
+| Espera del cliente            | 0s (responde ya)       | Hasta 20s con conexión abierta |
+| Latencia al llegar un mensaje | Espera al próximo poll | **Inmediata**                  |
+| Requests vacíos               | Muchos                 | Pocos                          |
+| Costo                         | Más caro               | Más barato                     |
 
 ## Disparadores
 
-| Pregunta dice | Solución |
-| ------------- | -------- |
-| "minimizar latencia" + "tráfico esporádico" | **Long polling** |
-| "reducir costo de API calls vacías" | **Long polling** |
-| "necesito respuesta inmediata aunque no haya mensajes" | Short polling |
-| "mensajes > 256 KB" | **SQS Extended Client Library + S3** |
+| Pregunta dice                                          | Solución                             |
+| ------------------------------------------------------ | ------------------------------------ |
+| "minimizar latencia" + "tráfico esporádico"            | **Long polling**                     |
+| "reducir costo de API calls vacías"                    | **Long polling**                     |
+| "necesito respuesta inmediata aunque no haya mensajes" | Short polling                        |
+| "mensajes > 256 KB"                                    | **SQS Extended Client Library + S3** |
 
 ## Trampas
 

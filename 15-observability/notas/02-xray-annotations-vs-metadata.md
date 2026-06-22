@@ -42,6 +42,13 @@
 - "Agregar nuevos campos al segment document" → NO existe. El schema del segment es fijo. Solo podés agregar info via **annotations** o **metadata**.
 - "capturar llamadas a servicios" ≠ metadata. Metadata es blob inerte, no captura nada.
 
+## MAPA MENTAL
+
+- Annotation → FILTRAR (indexada)
+- Metadata → LEER (blob de debug)
+- Subsegment → CAPTURAR LLAMADAS (downstream: latencia/status/error)
+- Sampling → CUÁNTO capturar (costo)
+
 ## Pregunta de prueba
 
 Mandás documentos de trazado a X-Ray con `PutTraceSegments`. ¿Qué componente
@@ -56,6 +63,7 @@ D) tracing header
 
 **C** (subsegments): registran cada llamada downstream (servicio, latencia, errores).
 Cuándo sería cada una:
+
 - **annotations** → pares clave-valor INDEXADOS para filtrar/buscar trazas.
 - **metadata** → info extra NO filtrable (blob de debug), no captura llamadas.
 - **tracing header** → propaga el trace ID entre servicios, no captura las llamadas.
