@@ -1,10 +1,12 @@
 # Desacoplar RDS de Elastic Beanstalk (sin perder datos)
 
 ## Problema
+
 EB con RDS ACOPLADA al entorno → al terminar el entorno, se borra la RDS.
 Querés separarla para hacer blue/green y para producción.
 
 ## Proceso correcto (doc oficial AWS)
+
 1. **Snapshot** de la RDS.
 2. **Habilitar deletion protection** en la RDS → sobrevive a la terminación del entorno.
 3. Crear **nuevo entorno EB** (blue/green) con la info de conexión a la RDS existente.
@@ -12,6 +14,7 @@ Querés separarla para hacer blue/green y para producción.
 5. Terminar el entorno viejo.
 
 ## El detalle que define la pregunta: el Security Group
+
 - Cuando EB crea la RDS acoplada, crea una **regla de SG** que une entorno ↔ RDS.
 - **ESA regla ES el acoplamiento** (a nivel de red).
 - El SG de la RDS **referencia** al SG del entorno EB.
@@ -19,11 +22,13 @@ Querés separarla para hacer blue/green y para producción.
   del entorno (la RDS lo referencia) → **la terminación FALLA**.
 
 ## Estrategia de examen
+
 - Es **blue/green**, NO canary (canary NO existe nativo en Beanstalk).
 - Dos opciones casi idénticas que difieren en UN paso → **ese paso ES la pregunta**.
   Preguntá: "¿por qué agregan este paso? ¿qué pasa si lo omito?"
 
 ## Error propio (patrón #3)
+
 Descartó la correcta porque asumió "los SG no tienen que ver con la base acoplada".
 FALSO: el SG es el mecanismo de acoplamiento. No descartar por corazonada;
 descartar solo cuando sabés EXACTAMENTE por qué.
@@ -44,7 +49,8 @@ D) Deshabilitar la deletion protection de la RDS
 **B**. El SG de la RDS referencia al SG del entorno; si no borrás esa regla, AWS
 no puede borrar el SG del entorno y la **terminación falla**.
 Cuándo sería cada una:
+
 - **canary** → nunca: Beanstalk no soporta canary nativo (es blue/green).
 - **borrar snapshot / quitar deletion protection** → exactamente lo contrario:
-  perderías el respaldo y la protección que mantienen viva la RDS.
+perderías el respaldo y la protección que mantienen viva la RDS.
 </details>
